@@ -2,6 +2,7 @@ require("dotenv").config();
 const AppError = require("../Helpers/AppError");
 const Products = require("../Models/Products");
 const Categories = require("../Models/Categories");
+const { cloudinary } = require("../Helpers/cloudinary");
 
 ////////////////////////////////////get methods//////////////////////////////////
 
@@ -33,7 +34,12 @@ const getAllProducts = async (req, res, next) => {
   }
 };
 
-const getProductsBySearch = (req,res,next)=>{
+//http://localhost:8080/products/?product=
+const getProductsBySearch = async(req,res,next)=>{
+  const {product} = req.query;
+  const searchedProducts = await Products.find({name:product})
+  if (searchedProducts.length == 0) return next(new AppError('product not found',404));
+  res.status(200).json(searchedProducts);
 }
 
 //http://localhost:8080/products/:id
@@ -64,7 +70,7 @@ const getProductsByCategory = async (req, res, next) => {
     if (!category) return next(new AppError("category does not exist"));
     const products = await Products.find({category});
     if (products.length == 0) return next(new AppError("no products were found!"));
-    res.send({ message: "All posts retrieved successfully", products });
+    res.send({ message: "All products retrieved successfully", products });
   }
   catch (err) 
   {
@@ -110,16 +116,17 @@ const getProductsByFilter = async (req, res, next) => {
 
 ////////////////////////////////////post methods//////////////////////////////////
 
+//http://localhost:8080/products/
 const createProduct = async (req, res, next) => {
   try {
-    const { name,details,price,category,photo_url,vendor,productRating,no_of_reviews,no_of_items_in_stock,availability,Reviews } = req.body;
-
+    const { name,details,price,vendor,productRating,no_of_reviews,no_of_items_in_stock,availability,Reviews } = req.body;
+    const {secure_url} = await cloudinary.v2.uploader.upload(req.file,{folder:'productImage'});
     const product = new Products({ 
       name, 
       details,
       price,
       category,
-      photo_url,
+      photo_url:secure_url,
       vendor,
       productRating,
       no_of_reviews,
@@ -135,4 +142,28 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllProducts ,getProductById,getProductsByCategory,getProductsByFilter};
+////////////////////////////////////delete methods//////////////////////////////////
+
+//http://localhost:8080/products/:id
+
+const deleteProduct = async(req,res,next)=>{
+  const {id} = req.params;
+  if(!id) return next(new AppError('please enter product id',404));
+  const deletedProduct = await Products.findByIdAndDelete(id);
+  res.status(200).json({message:'success',deletedProduct});
+}
+
+////////////////////////////////////update methods//////////////////////////////////
+
+//http://localhost:8080/products/:id
+
+const updateProduct = async(req,res,next)=>{
+    const {id} = req.params;
+    const product = req.body;
+    if(!id) return next(new AppError('please enter product id',404));
+    const updatedProduct = await Products.findByIdAndUpdate(id,product);
+    res.status(200).json({message:"success",updatedProduct});
+}
+
+
+module.exports = { getAllProducts ,getProductById,getProductsByCategory,getProductsByFilter,getProductsBySearch,createProduct,deleteProduct,updateProduct};
