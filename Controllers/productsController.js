@@ -116,11 +116,11 @@ const getProductsByFilter = async (req, res, next) => {
 
 ////////////////////////////////////post methods//////////////////////////////////
 
-//http://localhost:8080/products/
+//http://localhost:8080/products/:category
 const createProduct = async (req, res, next) => {
-  try {
+    const {category} = req.params;
     const { name,details,price,vendor,productRating,no_of_reviews,no_of_items_in_stock,availability,Reviews } = req.body;
-    const {secure_url} = await cloudinary.v2.uploader.upload(req.file,{folder:'productImage'});
+    const {secure_url} = await cloudinary.v2.uploader.upload(req.file.path,{folder:'productImage'});
     const product = new Products({ 
       name, 
       details,
@@ -135,11 +135,7 @@ const createProduct = async (req, res, next) => {
       Reviews
     });
     await product.save();
-
-    res.send({ message: "Product added successfully", product });
-  } catch (error) {
-    return next(error);
-  }
+    res.status(201).send({ message: "success", product });
 };
 
 ////////////////////////////////////delete methods//////////////////////////////////

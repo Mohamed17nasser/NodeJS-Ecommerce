@@ -1,6 +1,7 @@
 const express = require('express');
 const routes = express.Router();
 const {getAllProducts,getProductById,getProductsByCategory,getProductsByFilter, getProductsBySearch, createProduct, deleteProduct, updateProduct}=require('../Controllers/productsController');
+const fileUpload = require('../Helpers/fileUploader');
 
 
 //////////get methods///////////
@@ -17,7 +18,7 @@ routes.get('/filter/:sort',getProductsByFilter);
 routes.get('/',getProductsBySearch)
 
 //create new product
-routes.post('/',createProduct)
+routes.post('/:category',fileUpload(),createProduct)
 
 //update existing product
 routes.put('/:id',updateProduct)
