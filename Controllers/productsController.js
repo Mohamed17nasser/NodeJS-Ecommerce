@@ -119,11 +119,16 @@ const getProductsByFilter = async (req, res, next) => {
 //http://localhost:8080/products/:category
 const createProduct = async (req, res, next) => {
     const {category} = req.params;
+    const x = req.file;
     const { name,details,price,vendor,productRating,no_of_reviews,no_of_items_in_stock,availability,Reviews } = req.body;
     const {secure_url} = await cloudinary.uploader.upload(req.file.path,{folder:'productImage'});
+    // the following line of code is in development only (for postman)
+    const parsedDetails = JSON.parse(details);
+    const parsedReviews = JSON.parse(Reviews);
+    // end
     const product = new Products({ 
       name, 
-      details,
+      details:parsedDetails,
       price,
       category,
       photo_url:secure_url,
@@ -132,7 +137,7 @@ const createProduct = async (req, res, next) => {
       no_of_reviews,
       no_of_items_in_stock,
       availability,
-      Reviews
+      Reviews:parsedReviews
     });
     await product.save();
     res.status(201).json({ message: "success" , secure_url });
@@ -163,3 +168,16 @@ const updateProduct = async(req,res,next)=>{
 
 
 module.exports = { getAllProducts ,getProductById,getProductsByCategory,getProductsByFilter,getProductsBySearch,createProduct,deleteProduct,updateProduct};
+
+
+// const details =  {
+//   description: "test",
+//   details_images: [
+//       "urlTest",
+//   ],
+//   dimensions: {
+//     height: 30,
+//     width: 40,
+//     depth: 10,
+//   },
+// }

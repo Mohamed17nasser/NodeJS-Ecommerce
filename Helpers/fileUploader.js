@@ -1,17 +1,46 @@
-const multer = require('multer')
+const multer = require('multer');
 
 const fileUpload = () => {
-    const storage = multer.diskStorage({
-    })
+    const storage = multer.diskStorage({});
+    
     function fileFilter(req, file, cb) {
         if (!file.mimetype.startsWith('image')) {
-            cb(null, false)
+            cb(null, false);
         } else {
-            cb(null, true)
+            cb(null, true);
         }
     }
-    const upload = multer({ storage: storage, fileFilter })
-    return upload.single("image")
-}
+    
+    const upload = multer({ 
+        storage: storage,
+        fileFilter: fileFilter,
+        limits: {
+            fileSize: 1024 * 1024 * 5 // 5MB limit per file (adjust as needed)
+        }
+    }).array('images', 10); // 'images' is the field name for multiple file uploads, 10 is the maximum number of files
+    
+    return upload;
+};
 
-module.exports = fileUpload
+module.exports = fileUpload;
+
+
+
+
+// const multer = require('multer')
+
+// const fileUpload = () => {
+//     const storage = multer.diskStorage({
+//     })
+//     function fileFilter(req, file, cb) {
+//         if (!file.mimetype.startsWith('image')) {
+//             cb(null, false)
+//         } else {
+//             cb(null, true)
+//         }
+//     }
+//     const upload = multer({ storage: storage, fileFilter })
+//     return upload.single("image")
+// }
+
+// module.exports = fileUpload
