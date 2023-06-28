@@ -119,11 +119,20 @@ const getProductsByFilter = async (req, res, next) => {
 //http://localhost:8080/products/:category
 const createProduct = async (req, res, next) => {
     const {category} = req.params;
-    const x = req.file;
+    const {photo_url,details_images} = req.files;
+    if(photo_url.length == 0 || details_images.length == 0) return next(new AppError('please enter at least one image for product and one detailed image',404));
     const { name,details,price,vendor,productRating,no_of_reviews,no_of_items_in_stock,availability,Reviews } = req.body;
-    const {secure_url} = await cloudinary.uploader.upload(req.file.path,{folder:'productImage'});
+    const mainImg = [];
+    for(let i=0;i<photo_url.length;i++){
+      mainImg.push((await cloudinary.uploader.upload(photo_url[i].path,{folder:'productImage'})).secure_url);
+    }
+    const imgs = [];
+    for(let i=0;i<details_images.length;i++){
+      imgs.push((await cloudinary.uploader.upload(details_images[i].path,{folder:'productDetailsImage'})).secure_url);
+    }
     // the following line of code is in development only (for postman)
     const parsedDetails = JSON.parse(details);
+    parsedDetails.details_images = imgs;
     const parsedReviews = JSON.parse(Reviews);
     // end
     const product = new Products({ 
@@ -131,7 +140,7 @@ const createProduct = async (req, res, next) => {
       details:parsedDetails,
       price,
       category,
-      photo_url:secure_url,
+      photo_url:mainImg,
       vendor,
       productRating,
       no_of_reviews,
@@ -140,7 +149,7 @@ const createProduct = async (req, res, next) => {
       Reviews:parsedReviews
     });
     await product.save();
-    res.status(201).json({ message: "success" , secure_url });
+    res.status(201).json({ message: "success" , product });
 };
 
 ////////////////////////////////////delete methods//////////////////////////////////
