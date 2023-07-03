@@ -79,7 +79,7 @@ const login = async (req, res, next) => {
       user.password = undefined;
       res.send({ user, token });
     } else {
-      return next(new AppError("user does not exist"));
+      return next(new AppError("user does not exist",404));
     }
   } catch (error) {
     return next(error);
