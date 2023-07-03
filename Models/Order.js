@@ -3,30 +3,30 @@ const { Schema } = mongoose;
 
 //Order schema
 const OrderSchema = new Schema({
-  orderItems: [
+  orderItems: 
+  [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "orderItem",
-      required: true,
+      // required: true,
+      ref: "orderItems",
     },
   ],
-  addressDetails: {
-    Address: {
-      type: String,
-      required: [true, "please enter the address"],
-    },
-    city: {
-      type: String,
-      required: [true, "please enter the city"],
-    },
-    zip: {
-      type: Number,
-      required: [true, "please enter the zip"],
-    },
-    country: {
-      type: String,
-      required: [true, "please enter the country"],
-    },
+
+  Address: {
+    type: String,
+    required: [true, "please enter the address"],
+  },
+  city: {
+    type: String,
+    required: [true, "please enter the city"],
+  },
+  zip: {
+    type: Number,
+    required: [true, "please enter the zip"],
+  },
+  country: {
+    type: String,
+    required: [true, "please enter the country"],
   },
   phone: {
     type: String,
@@ -37,11 +37,16 @@ const OrderSchema = new Schema({
     required: true,
     default: "Pending",
   },
+  dateOfOrder: {
+    type: Date,
+    default: Date.now,
+  },
   totalPrice: {
     type: Number,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
+    // required: true,
     ref: "User",
   },
 });

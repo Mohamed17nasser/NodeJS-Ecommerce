@@ -8,9 +8,11 @@ const OrderedItemsSchema = new Schema({
     required: true,
   },
   productId: {
-    type: Number,
+    // type: Number,
     ref: "User",
+    // ref:'Products'
+    type: mongoose.Schema.Types.ObjectId,
   },
 });
-const OrderedItems = mongoose.model("OrderedItems", OrderedItemsSchema);
-module.exports = OrderedItems;
+const OrderedItem = mongoose.model("orderItems", OrderedItemsSchema);
+module.exports = OrderedItem;

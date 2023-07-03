@@ -5,13 +5,12 @@ const cors = require('cors');
 require('./db.js');
 require('dotenv/config');
 
-
-// require('express-async-errors');
+require('express-async-errors');
 
 const userRoutes=require('./Routes/userRoutes.js');
 const productRoutes = require('./Routes/productRoutes.js');
 const categoryRoutes = require('./Routes/categoryRoutes.js');
-// const orderRoutes = require('./Routes/orderRoutes.js');
+const orderRoutes = require('./Routes/orderRoutes.js');
 
 
 app.use(cors());
@@ -28,8 +27,7 @@ const tokenAuth=require('./Helpers/tokenAuth.js'); //for token authentication be
 app.use('/users',userRoutes);
 app.use('/products', productRoutes);
 app.use('/categories',tokenAuth, categoryRoutes);
-// app.use('/orders', tokenAuth, orderRoutes);
-
+app.use('/orders', orderRoutes);
 
 app.use((err,req,res,next)=>{
 	const statusCode = err.statusCode || 500;

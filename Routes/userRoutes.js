@@ -7,8 +7,6 @@ const upload = multer({ dest: 'uploads/' });
 const verifyToken=require('../Helpers/tokenAuth');
 const verifyAdmin = require('../Helpers/verifyAdmin');
 
-
-
 //////////get methods///////////
 
 routes.get('/',getUsers);
