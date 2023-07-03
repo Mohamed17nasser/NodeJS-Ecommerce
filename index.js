@@ -28,7 +28,7 @@ const tokenAuth=require('./Helpers/tokenAuth.js'); //for token authentication be
 
 
 //////////////Routes////////////////
-// app.use('/users',userRoutes);
+app.use('/users',userRoutes);
 app.use('/products', productRoutes);
 // app.use('/categories', categoryRoutes);
 // app.use('/orders', tokenAuth, orderRoutes);
