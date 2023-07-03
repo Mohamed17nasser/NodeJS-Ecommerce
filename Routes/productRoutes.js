@@ -21,7 +21,7 @@ routes.get('/',getProductsBySearch)
 routes.post('/:category',fileUpload(),createProduct)
 
 //update existing product
-routes.put('/:id',updateProduct)
+routes.patch('/:id',updateProduct)
 
 //delete product
 routes.delete('/:id',deleteProduct)
