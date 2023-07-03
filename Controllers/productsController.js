@@ -10,7 +10,7 @@ const cloudinary = require("../Helpers/cloudinary.js");
 
 const getAllProducts = async (req, res, next) => {
   try {
-    const { sort } = req.params.sort;
+    const { sort } = req.params;
     let products;
     switch (sort) {
       case 'lowest':
@@ -92,7 +92,7 @@ const getProductsByFilter = async (req, res, next) => {
     } else if (max) {
       filter.price = { $lte: max };
     }
-    const { sort } = req.params.sort;
+    const { sort } = req.params;
     let products;
     switch (sort) {
       case 'lowest':
