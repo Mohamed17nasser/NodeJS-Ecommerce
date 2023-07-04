@@ -74,8 +74,8 @@ const signUp = async (req, res, next) => {
       "Received user data:",
       email,
       username,
-      password,
-      confirmPassword
+      // password,
+      // confirmPassword
     );
 
     if (!email || !username || !password || !confirmPassword) {
@@ -110,43 +110,6 @@ const signUp = async (req, res, next) => {
   console.log("End of signUp");
 };
 
-//http://localhost:8080/users/login
-
-// const login = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
-//     console.log("Received login data:", email, password);
-
-//     if (!email || !password)
-//       return next(new AppError("Please enter the required info"));
-
-//     const user = await User.findOne({ email: email });
-//     if (user) {
-//       const isMatch = await user.checkPassword(password);
-//       if (!isMatch) return next(new AppError("Wrong password"));
-
-//       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-//       user.password = undefined;
-//       res.send({ user, token });
-//     } else {
-//       return next(new AppError("User does not exist"));
-//     }
-//   } catch (error) {
-//     console.error("An error occurred during login:", error);
-//     return next(error);
-//   }
-// };
-
-// if (user) {
-//   const isMatch = await user.checkPassword(password);
-//   if (!isMatch) return next(new AppError("Wrong password"));
-
-//   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-//   user.password = undefined;
-//   res.send({ user, token });
-// } else {
-//   return next(new AppError("User does not exist"));
-// }
 const login = async (req, res, next) => {
   console.log("login");
 
@@ -193,28 +156,7 @@ const login = async (req, res, next) => {
   //   return next(new AppError("User do not exist", 404));
   // }
 };
-//////////////////////////////////////////////
-// const UserData = async (req, res, next) => {
-//   const { token } = req.body;
-//   console.log(token, req.body);
 
-//   try {
-//     // Verify and decode the token to get the user data and roles
-//     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-//     // Retrieve user data from the decoded token (e.g., from the database)
-//     const user = getUserDataFromToken(decodedToken);
-
-//     // Return the user data and roles in the response
-//     res.status(200).json({
-//       user,
-//       roles: user.roles,
-//     });
-//   } catch (error) {
-//     console.error("Error decoding token:", error);
-//     res.status(500).json({ error: "Failed to decode token" });
-//   }
-// };
 const getUserDataFromToken = async (decodedToken) => {
   // Retrieve user data from the database or any other source based on the decoded token
   // For example, you can use the decoded token's ID to fetch the corresponding user from the database

@@ -5,7 +5,7 @@ const User = require("../Models/Users");
 require("dotenv").config();
 
 const verifyToken = async (req, res, next) => {
-
+console.log("hi")
   try {
     const token = req.headers.authorization;
     if (!token) {

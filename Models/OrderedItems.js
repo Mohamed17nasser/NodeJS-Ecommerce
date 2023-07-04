@@ -9,8 +9,8 @@ const OrderedItemsSchema = new Schema({
   },
   productId: {
     // type: Number,
-    ref: "User",
-    // ref:'Products'
+    // ref: "User",
+    ref:'Products',
     type: mongoose.Schema.Types.ObjectId,
   },
 });
