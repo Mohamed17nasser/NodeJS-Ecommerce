@@ -12,12 +12,12 @@ const { getAllOrders,getOrderById,getUserOrder,addOrder,updateOrder,deleteOrder,
 
 router.get('/',verifyToken, getAllOrders)
 router.get('/pending/',verifyToken, getPendingOrders)
-router.get('/:id', getOrderById)
+router.patch('/confirm/:id',verifyToken, updateOrderStatus)
 router.get('/user/:id', getUserOrder)
+router.get('/:id', getOrderById)
 router.post('/',verifyToken, addOrder)
 router.patch('/:id', verifyToken, updateOrder); 
 router.delete('/:id',verifyToken, deleteOrder)
-router.patch('/confirm/:id',verifyToken, updateOrderStatus)
 
 
 module.exports = router;
